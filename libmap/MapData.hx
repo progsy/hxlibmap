@@ -57,6 +57,7 @@ class MapData {
                 return i;
         }
 
+        var name = name.substr(0); // hack to ensure we're copying the string and not the reference
         var tex = {
             name: name,
             width: 0,
