@@ -94,8 +94,8 @@ class MapParser {
                     brushIdx = -1;
                     scope = ENTITY;
                 }
-            case ENTITY:
-                if (buf.charAt(0) == '"') {
+			case ENTITY:
+				if (buf.charAt(0) == '"' && buf.charAt(1) != '"') {
                     currentPropertyKey = buf.substring(1, buf.length - 1);
                     if (buf.charAt(buf.length - 1) == '"') {
                         scope = PROPERTY_VALUE;
