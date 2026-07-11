@@ -19,6 +19,8 @@ typedef FaceVertex = {
 typedef FaceGeometry = {
     var vertices:Array<FaceVertex>;
     var indices:Array<Int>;
+    var contentFlags:Int;
+    var surfaceFlags:Int;
 }
 
 typedef BrushGeometry = Array<FaceGeometry>;

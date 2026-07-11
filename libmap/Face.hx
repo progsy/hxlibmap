@@ -35,6 +35,8 @@ typedef Face = {
     var planeDist:Float;
 
     var textureIdx:Int;
+    var contentFlags:Int;
+    var surfaceFlags:Int;
 
     var isValveUV:Bool;
     var uvStandard:StandardUV;

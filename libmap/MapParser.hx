@@ -21,6 +21,9 @@ enum abstract ParseScope(Int) from Int to Int {
     var ROT;
     var U_SCALE;
     var V_SCALE;
+    var CONTENT_FLAGS;
+    var SURFACE_FLAGS;
+    var VALUE;
 }
 
 class MapParser {
@@ -243,9 +246,30 @@ class MapParser {
                 currentFace.uvExtra.scaleX = Std.parseFloat(buf);
                 scope = V_SCALE;
             case V_SCALE:
-                currentFace.uvExtra.scaleY = Std.parseFloat(buf);
-                commitFace();
-                scope = BRUSH;
+				currentFace.uvExtra.scaleY = Std.parseFloat(buf);
+				scope = CONTENT_FLAGS;
+			case CONTENT_FLAGS:
+				var flags = Std.parseInt(buf);
+				if (flags == null) {
+					scope = BRUSH;
+					commitFace();
+				} else {
+					currentFace.contentFlags = flags;
+					scope = SURFACE_FLAGS;
+				}
+			case SURFACE_FLAGS:
+				var flags = Std.parseInt(buf);
+				if (flags == null) {
+					scope = BRUSH;
+					commitFace();
+				} else {
+					currentFace.surfaceFlags = flags;
+					scope = VALUE;
+				}
+			case VALUE:
+				var value = Std.parseInt(buf);
+				scope = BRUSH;
+				commitFace();
             default:
         }
     }
@@ -283,6 +307,8 @@ class MapParser {
             planeNormal: Vector3.zero,
             planeDist: 0,
             textureIdx: 0,
+            surfaceFlags: 0,
+            contentFlags: 0,
             isValveUV: false,
             uvStandard: {
                 u: 0,

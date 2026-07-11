@@ -55,7 +55,9 @@ class GeoGenerator {
                 for (f in 0...brushInst.faces.length) {
                     brushGeoInst[f] = {
                         vertices: [],
-                        indices: []
+                        indices: [],
+                        contentFlags: 0,
+                        surfaceFlags: 0
                     };
                 }
             }
@@ -183,7 +185,6 @@ class GeoGenerator {
                             }
 
                             var texture = mapData.textures[faceInst.textureIdx];
-
                             var uv:VertexUV;
                             var tangent:VertexTangent;
                             if (faceInst.isValveUV) {
@@ -192,7 +193,9 @@ class GeoGenerator {
                             } else {
                                 uv = getStandardUV(vertex, faceInst, texture.width, texture.height);
                                 tangent = getStandardTangent(faceInst);
-                            }
+							}
+							faceGeoInst.contentFlags = faceInst.contentFlags;
+							faceGeoInst.surfaceFlags = faceInst.surfaceFlags;
 
                             var uniqueVertex = true;
                             var duplicateIndex = -1;
@@ -205,7 +208,6 @@ class GeoGenerator {
                                     break;
                                 }
                             }
-
                             if (uniqueVertex) {
                                 faceGeoInst.vertices.push({
                                     vertex: vertex,
