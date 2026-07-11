@@ -20,6 +20,8 @@ class SurfaceGatherer {
     public var textureFilterIdx = -1;
     public var brushFilterTextureIdx = -1;
     public var faceFilterTextureIdx = -1;
+    public var faceFilterContentFlags = 0;
+    public var faceFilterSurfaceFlags = 0;
     public var filterWorldspawnLayers = true;
 
     public var outSurfaces:Array<Surface>;
@@ -138,6 +140,12 @@ class SurfaceGatherer {
     
         if (textureFilterIdx != -1 && faceInst.textureIdx != textureFilterIdx)
             return true;
+        
+		if (faceFilterContentFlags != 0 && (faceFilterContentFlags & faceGeoInst.contentFlags) == 0)
+			return true;
+
+		if (faceFilterSurfaceFlags != 0 && (faceFilterSurfaceFlags & faceGeoInst.surfaceFlags) == 0)
+			return true;
 
         return false;
     }
@@ -159,6 +167,8 @@ class SurfaceGatherer {
         textureFilterIdx = -1;
         brushFilterTextureIdx = -1;
         faceFilterTextureIdx = -1;
+		faceFilterContentFlags = 0;
+		faceFilterSurfaceFlags = 0;
         filterWorldspawnLayers = true;
     }
 }
