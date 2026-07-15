@@ -6,10 +6,13 @@ import hxmath.math.Matrix3x3;
 import libmap.EntityGeometry.VertexUV;
 import hxmath.math.Vector3;
 
-class GeoGenerator {
-    public static inline var EPSILON = 1e-10;
 
+@:access(libmap.schema)
+#if !macro @:build(libmap.schema.Macro.Generator.build()) #end
+class Generator {
+    public static inline var EPSILON = 1e-10;
     var mapData:MapData;
+    
     public function new(mapData) {
         this.mapData = mapData;
     }
@@ -41,7 +44,7 @@ class GeoGenerator {
         return 0;
     }
 
-    public function run() {
+    public function generate(graph:libmap.schema.Graph) {
         for (e in 0...mapData.entities.length) {
             var entInst = mapData.entities[e];
             var entityGeoInst = [];
