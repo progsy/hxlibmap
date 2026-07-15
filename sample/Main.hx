@@ -14,7 +14,7 @@ class Main extends hxd.App {
 	public function load(entry:hxd.fs.FileEntry):Array<h3d.scene.Mesh> {
 		var meshes:Array<h3d.scene.Mesh> = [];
 		var input = entry.open();
-		var parser =  new libmap.MapParser(input);
+		var parser = new libmap.MapParser(input);
 		var data = parser.parse();
 		input.close();
 
@@ -37,9 +37,9 @@ class Main extends hxd.App {
 	}
 
 	override public function init() {
-        var window = hxd.Window.getInstance();
-        window.title = "libmap";
-        
+		var window = hxd.Window.getInstance();
+		window.title = "libmap";
+
 		var root = new h3d.scene.Object(s3d);
 		var tex = hxd.Res.grass.toTexture();
 		tex.wrap = Repeat;
@@ -58,7 +58,11 @@ class Main extends hxd.App {
 			s3d.camera.target = new h3d.Vector((bounds.xMin + bounds.xMax) / 2, (bounds.yMin + bounds.yMax) / 2, bounds.zMin + 2.0);
 		}
 		loadAndAdd();
+
 		#if (debug && sys)
+		var text = new h2d.Text(hxd.res.DefaultFont.get(), s2d);
+		text.setPosition(5, 3);
+		text.text = "Hot reload is enabled.";
 		hxd.Res.map.watch(loadAndAdd);
 		#end
 	}
