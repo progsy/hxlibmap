@@ -1,0 +1,6 @@
+-lib heaps
+-lib hxlibmap
+
+-main Main
+-js out/libmap.js
+--macro include("libmap.schema", false)

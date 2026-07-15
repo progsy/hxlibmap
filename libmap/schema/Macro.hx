@@ -424,7 +424,6 @@ class Generator {
 	static function build() {
 		var fields = Context.getBuildFields();
 		var exprs:Array<Expr> = [for (e in Data.constructExprs) e];
-		trace([for (e in Data.constructExprs) e.toString()].join(", "));
 
 		for (f in fields) {
 			switch (f.kind) {

@@ -1,0 +1,9 @@
+-lib heaps
+-lib hxlibmap
+-lib hlsdl
+
+-main Main
+-debug
+-D hot-reload
+-hl out/libmap.hl
+--macro include("libmap.schema", false)
