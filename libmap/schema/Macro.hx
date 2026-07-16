@@ -202,11 +202,11 @@ class FGD {
 		}
 		content = classDefinitions.join('\n');
 		if (overwrite) {
-			var o = sys.io.File.write(outputPath + ".fgd", false);
+			var o = sys.io.File.write(outputPath, false);
 			o.writeString('$content');
 			o.close();
 		} else {
-			var o = sys.io.File.append(outputPath + ".fgd", false);
+			var o = sys.io.File.append(outputPath, false);
 			o.writeString('\n$content');
 			o.close();
 		}
@@ -475,11 +475,14 @@ class Generator {
 			}
 		}
 
-		// Context.onAfterGenerate(() -> {
-		// 	for (i in 0...Data.scNames.length) {
-		// 		@:privateAccess FGD.build(Data.scNames[i], "Game", i == 0);
-		// 	}
-		// });
+		var fgdPath = Context.getDefines().get("libmap_fgd");
+		if (fgdPath != null) {
+			Context.onAfterGenerate(() -> {
+				for (i in 0...Data.names.length) {
+					@:privateAccess FGD.build(Data.names[i], fgdPath, i == 0);
+				}
+			});
+		}
 
 		return fields;
 	}
