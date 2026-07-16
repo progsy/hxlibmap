@@ -1,6 +1,6 @@
 -lib heaps
--lib hxlibmap
+-lib phxmap
 
 -main Main
--js out/libmap.js
---macro include("libmap.schema", false)
+-js out/phxmap.js
+--macro include("phxmap.schema", false)

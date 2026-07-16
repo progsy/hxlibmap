@@ -1,4 +1,4 @@
-package libmap.schema;
+package phxmap.schema;
 
 using StringTools;
 
@@ -405,7 +405,7 @@ class Loader {
 								});
 							}
 							var n = typePath.pack.length > 0 ? '${typePath.pack.join('.')}.${typePath.name}' : typePath.name;
-							if (!Data.names.contains(n) && !n.startsWith("libmap")) {
+							if (!Data.names.contains(n) && !n.startsWith("phxmap")) {
 								Data.names.push(n);
 							}
 						}
@@ -434,10 +434,10 @@ class Generator {
 							if (graph != null) {
 								var nextId = 1;
 								var internalIds:Map<Int, Int> = [];
-								var spawnClassTbGroup:Map<libmap.schema.Definition, Int> = [];
+								var spawnClassTbGroup:Map<phxmap.schema.Definition, Int> = [];
 								for (i in 0...mapData.entities.length) {
 									var entity = mapData.entities[i];
-									var definition:libmap.schema.Definition = null;
+									var definition:phxmap.schema.Definition = null;
 									var className = entity.properties.get("classname");
 									var tbType = entity.properties.get("_tb_type");
 									var tbId = Std.parseInt(entity.properties.get("_tb_id"));
@@ -453,15 +453,15 @@ class Generator {
 										if (tbGroup != null) {
 											spawnClassTbGroup.set(definition, tbGroup);
 										}
-										var groupDefinition = Std.downcast(definition, libmap.schema.GroupDefinition);
+										var groupDefinition = Std.downcast(definition, phxmap.schema.GroupDefinition);
 										if (groupDefinition != null) {
 											graph.groups.set(groupDefinition.name, groupDefinition);
 										}
 									}
 								}
 								for (definition in graph.definitions) {
-									var pointDefinition = Std.downcast(definition, libmap.schema.PointDefinition);
-									var solidDefinition = Std.downcast(definition, libmap.schema.SolidDefinition);
+									var pointDefinition = Std.downcast(definition, phxmap.schema.PointDefinition);
+									var solidDefinition = Std.downcast(definition, phxmap.schema.SolidDefinition);
 									if (pointDefinition != null) {
 										pointDefinition.group = cast graph.definitions.get(internalIds.get(spawnClassTbGroup.get(definition)));
 									} else if (solidDefinition != null) {
@@ -475,7 +475,7 @@ class Generator {
 			}
 		}
 
-		var fgdPath = Context.getDefines().get("libmap_fgd");
+		var fgdPath = Context.getDefines().get("phxmap.fgd");
 		if (fgdPath != null) {
 			Context.onAfterGenerate(() -> {
 				for (i in 0...Data.names.length) {

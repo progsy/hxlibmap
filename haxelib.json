@@ -1,6 +1,6 @@
 {
-	"name": "hxlibmap",
-    "url": "https://github.com/progsy/hxlibmap",
+	"name": "phxmap",
+    "url": "https://github.com/progsy/phxmap",
 	"license": "MIT",
     "tags": ["quake", "map", "trenchbroom", "format", "bsp", "heaps", "kha"],
     "description": "Trenchbroom-compatible map loader for Haxe",

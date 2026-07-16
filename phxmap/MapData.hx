@@ -1,4 +1,4 @@
-package libmap;
+package phxmap;
 
 typedef TextureData = {
 	var name:String;

@@ -1,4 +1,4 @@
-package libmap.schema;
+package phxmap.schema;
 
 class Graph {
 	var definitions:Map<Int, Definition> = [];

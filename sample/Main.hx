@@ -1,5 +1,5 @@
 class Main extends hxd.App {
-	var graph:libmap.schema.Graph = new libmap.schema.Graph();
+	var graph:phxmap.schema.Graph = new phxmap.schema.Graph();
 	var cameraPos:h3d.Vector = new h3d.Vector();
 
 	static function main() {
@@ -15,7 +15,7 @@ class Main extends hxd.App {
 	public function load(entry:hxd.fs.FileEntry):Array<h3d.scene.Mesh> {
 		var meshes:Array<h3d.scene.Mesh> = [];
 		var input = entry.open();
-		var parser = new libmap.MapParser(input);
+		var parser = new phxmap.MapParser(input);
 		var data = parser.parse();
 		input.close();
 
@@ -25,10 +25,10 @@ class Main extends hxd.App {
 			tex.height = size.height;
 		}
 
-		var generator = new libmap.Generator(data);
+		var generator = new phxmap.Generator(data);
 		generator.generate(graph);
 
-		var definitions = graph.findAll(libmap.schema.SolidDefinition);
+		var definitions = graph.findAll(phxmap.schema.SolidDefinition);
 		for (d in definitions) {
 			var primitive = d.getPrimitive();
 			var mesh = new h3d.scene.Mesh(primitive, null, null);
@@ -39,7 +39,7 @@ class Main extends hxd.App {
 
 	override public function init() {
 		var window = hxd.Window.getInstance();
-		window.title = "libmap";
+		window.title = "phxmap";
 		window.addEventTarget((event) -> {
 			switch (event.kind) {
 				case EWheel:

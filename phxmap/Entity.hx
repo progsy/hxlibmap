@@ -1,4 +1,4 @@
-package libmap;
+package phxmap;
 
 enum abstract SpawnType(Int) from Int to Int {
 	var WORLDSPAWN = 0;

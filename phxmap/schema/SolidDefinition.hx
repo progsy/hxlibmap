@@ -1,9 +1,9 @@
-package libmap.schema;
+package phxmap.schema;
 
 typedef Geometry = {
-	vertices:Array< #if heaps hxd.impl.Float32 #else Float #end>,
+	vertices:Array< #if heaps hxd.impl.Float32 #elseif kha kha.FastFloat #else Float #end>,
 	indices:Array<Int>,
-	texcoords:Array<Float>
+	texcoords:Array< #if heaps hxd.impl.Float32 #elseif kha kha.FastFloat #else Float #end>
 };
 
 @:solid @:standard
@@ -12,20 +12,20 @@ class SolidDefinition implements Definition {
 
 	public var id:Int;
 	public var group:GroupDefinition;
-	@:c(mapData.entities[index].center.x) @:f(#if (heaps || libmap_lefthanded) Settings.scaleInverse #else Settings.scale #end) public var x:Float;
+	@:c(mapData.entities[index].center.x) @:f(#if (heaps || phxmap.lefthanded) Settings.scaleInverse #else Settings.scale #end) public var x:Float;
 	@:c(mapData.entities[index].center.y) @:f(Settings.scale) public var y:Float;
 	@:c(mapData.entities[index].center.z) @:f(Settings.scale) public var z:Float;
 	@:p public var angle:Float;
 
 	/**
 		Each piece of geometry is associated with a determined tag.
-		Use **libmap.SolidDefinition.DEFAULT_TAG** to fetch the default geometry.
+		Use **phxmap.SolidDefinition.DEFAULT_TAG** to fetch the default geometry.
 	**/
 	public var geometries(default, null):Map<String, Geometry> = [];
 
 	function new() {}
 
-	public function load(mapData:libmap.MapData, index:Int) {
+	public function load(mapData:phxmap.MapData, index:Int) {
 		var indexOffsets:Map<Geometry, Int> = [];
 		var entity = mapData.entities[index];
 		var i = index;
@@ -37,14 +37,18 @@ class SolidDefinition implements Definition {
 				for (tag in tags) {
 					var geometry:Geometry = geometries.get(tag);
 					if (geometry == null) {
-						geometry = {vertices: [], indices: [], texcoords: []};
+						geometry = {
+							vertices: [],
+							indices: [],
+							texcoords: []
+						};
 						geometries.set(tag, geometry);
 						indexOffsets.set(geometry, 0);
 					}
 
 					var indexOffset = indexOffsets.get(geometry);
 					for (v in geo.vertices) {
-						geometry.vertices.push(#if (heaps || libmap_lefthanded) Settings.scaleInverse(v.vertex.x - entity.center.x) #else Settings.scale(v.vertex.x
+						geometry.vertices.push(#if (heaps || phxmap.lefthanded) Settings.scaleInverse(v.vertex.x - entity.center.x) #else Settings.scale(v.vertex.x
 							- entity.center.x) #end);
 						geometry.vertices.push(Settings.scale(v.vertex.y - entity.center.y));
 						geometry.vertices.push(Settings.scale(v.vertex.z - entity.center.z));
@@ -55,8 +59,8 @@ class SolidDefinition implements Definition {
 					var u = 0;
 					while (u < (geo.vertices.length - 2) * 3) {
 						geometry.indices.push(geo.indices[u] + indexOffset);
-						geometry.indices.push(geo.indices[u + #if (heaps || libmap_lefthanded) 2 #else 1 #end] + indexOffset);
-						geometry.indices.push(geo.indices[u + #if (heaps || libmap_lefthanded) 1 #else 2 #end] + indexOffset);
+						geometry.indices.push(geo.indices[u + #if (heaps || phxmap.lefthanded) 2 #else 1 #end] + indexOffset);
+						geometry.indices.push(geo.indices[u + #if (heaps || phxmap.lefthanded) 1 #else 2 #end] + indexOffset);
 						u += 3;
 					}
 					indexOffsets.set(geometry, indexOffset + geo.vertices.length);

@@ -1,4 +1,4 @@
-package libmap.schema;
+package phxmap.schema;
 
 @:solid @:standard @:name(worldspawn)
 class WorldDefinition extends SolidDefinition {
@@ -8,7 +8,7 @@ class WorldDefinition extends SolidDefinition {
 		super();
 	}
 
-	override function load(mapData:libmap.MapData, index:Int) {
+	override function load(mapData:phxmap.MapData, index:Int) {
 		super.load(mapData, index);
 	}
 }

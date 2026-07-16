@@ -1,4 +1,4 @@
-package libmap;
+package phxmap;
 
 typedef Brush = {
 	var faces:Array<Face>;

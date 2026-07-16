@@ -1,4 +1,4 @@
-package libmap;
+package phxmap;
 
 import hxmath.math.*;
 

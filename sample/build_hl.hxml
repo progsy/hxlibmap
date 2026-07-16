@@ -1,9 +1,9 @@
 -lib heaps
--lib hxlibmap
+-lib phxmap
 -lib hlsdl
 
 -main Main
 -debug
 -D hot-reload
--hl out/libmap.hl
---macro include("libmap.schema", false)
+-hl out/phxmap.hl
+--macro include("phxmap.schema", false)
