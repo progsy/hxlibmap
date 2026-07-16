@@ -1,6 +1,6 @@
 package libmap;
 
 typedef Brush = {
-    var faces:Array<Face>;
-    var center:hxmath.math.Vector3;
+	var faces:Array<Face>;
+	var center:hxmath.math.Vector3;
 }

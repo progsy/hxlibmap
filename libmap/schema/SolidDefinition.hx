@@ -44,7 +44,8 @@ class SolidDefinition implements Definition {
 
 					var indexOffset = indexOffsets.get(geometry);
 					for (v in geo.vertices) {
-						geometry.vertices.push(#if (heaps || libmap_lefthanded) Settings.scaleInverse(v.vertex.x - entity.center.x) #else Settings.scale(v.vertex.x - entity.center.x) #end);
+						geometry.vertices.push(#if (heaps || libmap_lefthanded) Settings.scaleInverse(v.vertex.x - entity.center.x) #else Settings.scale(v.vertex.x
+							- entity.center.x) #end);
 						geometry.vertices.push(Settings.scale(v.vertex.y - entity.center.y));
 						geometry.vertices.push(Settings.scale(v.vertex.z - entity.center.z));
 						geometry.texcoords.push(v.uv.u);
