@@ -58,6 +58,7 @@ class Generator {
 					brushGeoInst[f] = {
 						vertices: [],
 						indices: [],
+						textureName: "",
 						contentFlags: 0,
 						surfaceFlags: 0
 					};
@@ -198,6 +199,7 @@ class Generator {
 							}
 							faceGeoInst.contentFlags = faceInst.contentFlags;
 							faceGeoInst.surfaceFlags = faceInst.surfaceFlags;
+							faceGeoInst.textureName = texture.name;
 
 							var uniqueVertex = true;
 							var duplicateIndex = -1;

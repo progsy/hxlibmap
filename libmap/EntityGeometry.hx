@@ -19,6 +19,7 @@ typedef FaceVertex = {
 typedef FaceGeometry = {
 	var vertices:Array<FaceVertex>;
 	var indices:Array<Int>;
+	var textureName:String;
 	var contentFlags:Int;
 	var surfaceFlags:Int;
 }

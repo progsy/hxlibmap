@@ -33,7 +33,7 @@ class SolidDefinition implements Definition {
 			var brush = entity.brushes[j];
 			for (k in 0...brush.faces.length) {
 				var geo = mapData.entitiesGeo[i][j][k];
-				var tags = determineTags(geo.contentFlags, geo.surfaceFlags);
+				var tags = determineTags(geo.textureName, geo.contentFlags, geo.surfaceFlags);
 				for (tag in tags) {
 					var geometry:Geometry = geometries.get(tag);
 					if (geometry == null) {
@@ -66,9 +66,9 @@ class SolidDefinition implements Definition {
 	}
 
 	/**
-		This is meant to be overriden to specify geometry tags based on content and surface flags.
+		This is meant to be overriden to specify geometry tags based on texture name, content flags and surface flags.
 	**/
-	function determineTags(contentFlags:Int, surfaceFlags:Int):Array<String> {
+	function determineTags(textureName:String, contentFlags:Int, surfaceFlags:Int):Array<String> {
 		return [DEFAULT_TAG];
 	}
 
