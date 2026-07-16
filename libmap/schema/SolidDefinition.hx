@@ -12,7 +12,7 @@ class SolidDefinition implements Definition {
 
 	public var id:Int;
 	public var group:GroupDefinition;
-	@:c(mapData.entities[index].center.x) @:f(#if heaps Settings.scaleInverse #else Settings.scale #end) public var x:Float;
+	@:c(mapData.entities[index].center.x) @:f(#if (heaps || libmap_lefthanded) Settings.scaleInverse #else Settings.scale #end) public var x:Float;
 	@:c(mapData.entities[index].center.y) @:f(Settings.scale) public var y:Float;
 	@:c(mapData.entities[index].center.z) @:f(Settings.scale) public var z:Float;
 	@:p public var angle:Float;
@@ -44,7 +44,7 @@ class SolidDefinition implements Definition {
 
 					var indexOffset = indexOffsets.get(geometry);
 					for (v in geo.vertices) {
-						geometry.vertices.push(#if heaps Settings.scaleInverse(v.vertex.x - entity.center.x) #else Settings.scale(v.vertex.x - entity.center.x) #end);
+						geometry.vertices.push(#if (heaps || libmap_lefthanded) Settings.scaleInverse(v.vertex.x - entity.center.x) #else Settings.scale(v.vertex.x - entity.center.x) #end);
 						geometry.vertices.push(Settings.scale(v.vertex.y - entity.center.y));
 						geometry.vertices.push(Settings.scale(v.vertex.z - entity.center.z));
 						geometry.texcoords.push(v.uv.u);
@@ -54,8 +54,8 @@ class SolidDefinition implements Definition {
 					var u = 0;
 					while (u < (geo.vertices.length - 2) * 3) {
 						geometry.indices.push(geo.indices[u] + indexOffset);
-						geometry.indices.push(geo.indices[u + 2] + indexOffset);
-						geometry.indices.push(geo.indices[u + 1] + indexOffset);
+						geometry.indices.push(geo.indices[u + #if (heaps || libmap_lefthanded) 2 #else 1 #end] + indexOffset);
+						geometry.indices.push(geo.indices[u + #if (heaps || libmap_lefthanded) 1 #else 2 #end] + indexOffset);
 						u += 3;
 					}
 					indexOffsets.set(geometry, indexOffset + geo.vertices.length);
