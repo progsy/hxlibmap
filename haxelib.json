@@ -1,12 +1,12 @@
 {
 	"name": "hxlibmap",
-    "url": "https://github.com/RollinBarrel/hxlibmap",
+    "url": "https://github.com/progsy/hxlibmap",
 	"license": "MIT",
-    "tags": ["quake", "map", "trenchbroom", "format", "bsp"],
-    "description": "Trenchbroom-compatible .map parser for Haxe, port of libmap-cpp",
-    "version": "1.0.1",
-    "releasenote": "restore spaces in property values",
-    "contributors": ["RollinBarrel"],
+    "tags": ["quake", "map", "trenchbroom", "format", "bsp", "heaps", "kha"],
+    "description": "Trenchbroom-compatible map loader for Haxe",
+    "version": "2.0.0",
+    "releasenote": "",
+    "contributors": ["RollinBarrel", "progsy"],
     "dependencies": {
         "hxmath": ""
     }
