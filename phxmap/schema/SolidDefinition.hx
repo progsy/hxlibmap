@@ -3,7 +3,9 @@ package phxmap.schema;
 typedef Geometry = {
 	vertices:Array< #if heaps hxd.impl.Float32 #elseif kha kha.FastFloat #else Float #end>,
 	indices:Array<Int>,
-	texcoords:Array< #if heaps hxd.impl.Float32 #elseif kha kha.FastFloat #else Float #end>
+	texcoords:Array< #if heaps hxd.impl.Float32 #elseif kha kha.FastFloat #else Float #end>,
+	normals:Array< #if heaps hxd.impl.Float32 #elseif kha kha.FastFloat #else Float #end>,
+	tangents:Array< #if heaps hxd.impl.Float32 #elseif kha kha.FastFloat #else Float #end>
 };
 
 @:solid @:standard
@@ -40,7 +42,9 @@ class SolidDefinition implements Definition {
 						geometry = {
 							vertices: [],
 							indices: [],
-							texcoords: []
+							texcoords: [],
+							normals: [],
+							tangents: []
 						};
 						geometries.set(tag, geometry);
 						indexOffsets.set(geometry, 0);
@@ -54,6 +58,13 @@ class SolidDefinition implements Definition {
 						geometry.vertices.push(Settings.scale(v.vertex.z - entity.center.z));
 						geometry.texcoords.push(v.uv.u);
 						geometry.texcoords.push(v.uv.v);
+						geometry.normals.push(#if (heaps || phxmap.lefthanded) -v.normal.x #else v.normal.x #end);
+						geometry.normals.push(v.normal.y);
+						geometry.normals.push(v.normal.z);
+						geometry.tangents.push(#if (heaps || phxmap.lefthanded) -v.tangent.x #else v.tangent.x #end);
+						geometry.tangents.push(v.tangent.y);
+						geometry.tangents.push(v.tangent.z);
+						geometry.tangents.push(#if (heaps || phxmap.lefthanded) -v.tangent.w #else v.tangent.w #end);
 					}
 
 					var u = 0;
@@ -90,13 +101,19 @@ class SolidDefinition implements Definition {
 
 			var idxs = new hxd.IndexBuffer(geometry.indices.length);
 			var verts:Array<h3d.col.Point> = [];
+			var norms:Array<h3d.col.Point> = [];
+			var tans:Array<h3d.col.Point> = [];
 			var uvs:Array<h3d.prim.UV> = [];
 			verts.resize(Std.int(geometry.vertices.length / 3));
+			norms.resize(Std.int(geometry.vertices.length / 3));
+			tans.resize(Std.int(geometry.vertices.length / 3));
 			uvs.resize(Std.int(geometry.texcoords.length / 2));
 
 			var j = 0;
 			for (i in 0...verts.length) {
-				verts[i] = new h3d.col.Point(geometry.vertices[j++], geometry.vertices[j++], geometry.vertices[j++]);
+				verts[i] = new h3d.col.Point(geometry.vertices[j], geometry.vertices[j + 1], geometry.vertices[j + 2]);
+				norms[i] = new h3d.col.Point(geometry.normals[j], geometry.normals[j + 1], geometry.normals[j + 2]);
+				tans[i] = new h3d.col.Point(geometry.tangents[j++], geometry.tangents[j++], geometry.tangents[j++]);
 			}
 			for (i in 0...idxs.length) {
 				idxs[i] = geometry.indices[i];
@@ -108,8 +125,8 @@ class SolidDefinition implements Definition {
 
 			primitive = new h3d.prim.Polygon(verts, idxs);
 			primitive.uvs = uvs;
-			primitive.addNormals();
-			primitive.addTangents();
+			primitive.normals = norms;
+			primitive.tangents = tans;
 			primitiveCache.set(tag, primitive);
 		}
 		return primitive;
