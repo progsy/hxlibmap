@@ -1,5 +1,6 @@
 class Main extends hxd.App {
 	var graph:libmap.schema.Graph = new libmap.schema.Graph();
+	var cameraPos:h3d.Vector = new h3d.Vector();
 
 	static function main() {
 		#if sys
@@ -39,6 +40,14 @@ class Main extends hxd.App {
 	override public function init() {
 		var window = hxd.Window.getInstance();
 		window.title = "libmap";
+		window.addEventTarget((event) -> {
+			switch (event.kind) {
+				case EWheel:
+					cameraPos.x = hxd.Math.clamp(cameraPos.x - event.wheelDelta * 1.5, -24.0, -6.0);
+					cameraPos.y = hxd.Math.clamp(cameraPos.y - event.wheelDelta * 1.5, -24.0, -6.0);
+				default:
+			}
+		});
 
 		var root = new h3d.scene.Object(s3d);
 		var tex = hxd.Res.grass.toTexture();
@@ -54,8 +63,9 @@ class Main extends hxd.App {
 				root.addChild(mesh);
 			}
 			var bounds = root.getBounds();
-			s3d.camera.pos = new h3d.Vector(bounds.xMin - 8.0, bounds.yMin - 8.0, bounds.zMax + 5.0);
+			s3d.camera.pos = new h3d.Vector(bounds.xMin - 14.0, bounds.yMin - 14.0, bounds.zMax + 14.0);
 			s3d.camera.target = new h3d.Vector((bounds.xMin + bounds.xMax) / 2, (bounds.yMin + bounds.yMax) / 2, bounds.zMin + 2.0);
+			cameraPos = s3d.camera.pos.clone();
 		}
 		loadAndAdd();
 
@@ -65,5 +75,9 @@ class Main extends hxd.App {
 		text.text = "Hot reload is enabled.";
 		hxd.Res.map.watch(loadAndAdd);
 		#end
+	}
+
+	override function update(dt:Float) {
+		s3d.camera.pos.lerp(s3d.camera.pos, cameraPos, dt * 15.0);
 	}
 }
