@@ -255,6 +255,7 @@ class Loader {
 						for (f in fields) {
 							var fgdName:String = f.name;
 							var marked = false;
+							var arrayAccessParams:Array<Expr> = [];
 							var arrayParams:Array<Expr> = [];
 							var customExpr:Expr;
 							var func:Expr;
@@ -264,6 +265,8 @@ class Loader {
 								} else if (m.params.length > 0) {
 									if (m.name == ":f") {
 										func = m.params[0];
+									} else if (m.name == ":aa") {
+										arrayAccessParams = m.params;
 									} else if (m.name == ":a") {
 										arrayParams = m.params;
 									} else if (m.name == ":c") {
@@ -273,12 +276,179 @@ class Loader {
 									}
 								}
 							}
-							if (!marked && customExpr == null && arrayParams.length == 0) {
+							if (!marked && customExpr == null && arrayAccessParams.length == 0 && arrayParams.length == 0) {
 								continue;
 							}
 							switch (f.kind) {
 								case FVar(t, e), FProp(_, _, t, e):
-									if (arrayParams.length == 0) {
+									if (arrayAccessParams.length > 0) {
+										switch (t) {
+											case macro :Int:
+												var splitProperty = arrayAccessParams[0].toString();
+												var arrayIndex = arraySplits.get(splitProperty) ?? 0;
+												var arraySeparator = ' ';
+												if (arrayAccessParams.length == 2) {
+													arraySeparator = arrayAccessParams[1].getValue();
+												} else if (arrayAccessParams.length > 2) {
+													arraySeparator = arrayAccessParams[1].getValue();
+													arrayIndex = arrayAccessParams[2].getValue();
+												}
+
+												if (!arraySplits.exists(splitProperty)) {
+													arraySplits.set(splitProperty, 0);
+													exprs.push(macro var $splitProperty = mapData.entities[index].properties.get($v{splitProperty})
+													.split($v{arraySeparator}));
+												}
+
+												if (customExpr != null) {
+													if (func == null) {
+														exprs.push(macro $i{f.name} = $customExpr);
+													} else {
+														exprs.push(macro $i{f.name} = $func($customExpr));
+													}
+												} else {
+													if (func == null) {
+														exprs.push(macro $i{f.name} = Std.parseInt($i{splitProperty}[$v{arrayIndex}]));
+													} else {
+														exprs.push(macro $i{f.name} = $func(Std.parseInt($i{splitProperty}[$v{arrayIndex}])));
+													}
+												}
+												arraySplits.set(splitProperty, arrayIndex);
+											case macro :Float:
+												var splitProperty = arrayAccessParams[0].toString();
+												var arrayIndex = arraySplits.get(splitProperty) ?? 0;
+												var arraySeparator = ' ';
+												if (arrayAccessParams.length == 2) {
+													arraySeparator = arrayAccessParams[1].getValue();
+												} else if (arrayAccessParams.length > 2) {
+													arraySeparator = arrayAccessParams[1].getValue();
+													arrayIndex = arrayAccessParams[2].getValue();
+												}
+
+												if (!arraySplits.exists(splitProperty)) {
+													arraySplits.set(splitProperty, 0);
+													exprs.push(macro var $splitProperty = mapData.entities[index].properties.get($v{splitProperty})
+													.split($v{arraySeparator}));
+												}
+
+												if (customExpr != null) {
+													if (func == null) {
+														exprs.push(macro $i{f.name} = $customExpr);
+													} else {
+														exprs.push(macro $i{f.name} = $func($customExpr));
+													}
+												} else {
+													if (func == null) {
+														exprs.push(macro $i{f.name} = Std.parseFloat($i{splitProperty}[$v{arrayIndex}]));
+													} else {
+														exprs.push(macro $i{f.name} = $func(Std.parseFloat($i{splitProperty}[$v{arrayIndex}])));
+													}
+												}
+												arraySplits.set(splitProperty, arrayIndex);
+											case macro :String:
+												var splitProperty = arrayAccessParams[0].toString();
+												var arrayIndex = arraySplits.get(splitProperty) ?? 0;
+												var arraySeparator = ' ';
+												if (arrayAccessParams.length == 2) {
+													arraySeparator = arrayAccessParams[1].getValue();
+												} else if (arrayAccessParams.length > 2) {
+													arraySeparator = arrayAccessParams[1].getValue();
+													arrayIndex = arrayAccessParams[2].getValue();
+												}
+
+												if (!arraySplits.exists(splitProperty)) {
+													arraySplits.set(splitProperty, 0);
+													exprs.push(macro var $splitProperty = mapData.entities[index].properties.get($v{splitProperty})
+													.split($v{arraySeparator}));
+												}
+
+												if (customExpr != null) {
+													if (func == null) {
+														exprs.push(macro $i{f.name} = $customExpr);
+													} else {
+														exprs.push(macro $i{f.name} = $func($customExpr));
+													}
+												} else {
+													if (func == null) {
+														exprs.push(macro $i{f.name} = $i{splitProperty}[$v{arrayIndex}]);
+													} else {
+														exprs.push(macro $i{f.name} = $func($i{splitProperty}[$v{arrayIndex}]));
+													}
+												}
+												arraySplits.set(splitProperty, arrayIndex);
+											default:
+										}
+									} else if (arrayParams.length > 0) {
+										switch (t) {
+											case macro :Int:
+												var splitProperty = arrayParams[0].toString();
+												var arraySeparator = ' ';
+												if (arrayParams.length > 1) {
+													arraySeparator = arrayParams[1].getValue();
+												}
+
+												if (!arraySplits.exists(splitProperty)) {
+													arraySplits.set(splitProperty, 0);
+													exprs.push(macro var $splitProperty = mapData.entities[index].properties.get($v{splitProperty})
+													.split($v{arraySeparator}));
+												}
+
+												if (func == null) {
+													exprs.push(macro for (s in $i{splitProperty}) {
+														$i{f.name}.push(Std.parseInt(s));
+													});
+												} else {
+													exprs.push(macro for (s in $i{splitProperty}) {
+														$i{f.name}.push($func(Std.parseInt(s)));
+													});
+												}
+											case macro :Float:
+												var splitProperty = arrayParams[0].toString();
+												var arraySeparator = ' ';
+												if (arrayParams.length > 1) {
+													arraySeparator = arrayParams[1].getValue();
+												}
+
+												if (!arraySplits.exists(splitProperty)) {
+													arraySplits.set(splitProperty, 0);
+													exprs.push(macro var $splitProperty = mapData.entities[index].properties.get($v{splitProperty})
+													.split($v{arraySeparator}));
+												}
+
+												if (func == null) {
+													exprs.push(macro for (s in $i{splitProperty}) {
+														$i{f.name}.push(Std.parseFloat(s));
+													});
+												} else {
+													exprs.push(macro for (s in $i{splitProperty}) {
+														$i{f.name}.push($func(Std.parseFloat(s)));
+													});
+												}
+											case macro :String:
+												var splitProperty = arrayParams[0].toString();
+												var arraySeparator = ' ';
+												if (arrayParams.length > 1) {
+													arraySeparator = arrayParams[1].getValue();
+												}
+
+												if (!arraySplits.exists(splitProperty)) {
+													arraySplits.set(splitProperty, 0);
+													exprs.push(macro var $splitProperty = mapData.entities[index].properties.get($v{splitProperty})
+													.split($v{arraySeparator}));
+												}
+
+												if (func == null) {
+													exprs.push(macro for (s in $i{splitProperty}) {
+														$i{f.name}.push(s);
+													});
+												} else {
+													exprs.push(macro for (s in $i{splitProperty}) {
+														$i{f.name}.push($func(s));
+													});
+												}
+											default:
+										}
+									} else {
 										if (customExpr != null) {
 											if (func == null) {
 												exprs.push(macro $i{f.name} = $customExpr);
@@ -321,74 +491,6 @@ class Loader {
 														default:
 													}
 											}
-										}
-									} else {
-										switch (t) {
-											case macro :Int:
-												var splitProperty = arrayParams[0].toString();
-												var arrayIndex = arraySplits.get(splitProperty) ?? 0;
-												var arraySeparator = ' ';
-												if (arrayParams.length > 1) {
-													arrayIndex = arrayParams[1].getValue();
-												}
-
-												if (!arraySplits.exists(splitProperty)) {
-													arraySplits.set(splitProperty, 0);
-													exprs.push(macro var $splitProperty = mapData.entities[index].properties.get($v{splitProperty})
-													.split($v{arraySeparator}));
-												}
-
-												if (customExpr != null) {
-													if (func == null) {
-														exprs.push(macro $i{f.name} = $customExpr);
-													} else {
-														exprs.push(macro $i{f.name} = $func($customExpr));
-													}
-												} else {
-													if (func == null) {
-														exprs.push(macro $i{f.name} = Std.parseInt($i{splitProperty}[$v{arrayIndex}]));
-													} else {
-														exprs.push(macro $i{f.name} = $func(Std.parseInt($i{splitProperty}[$v{arrayIndex}])));
-													}
-												}
-
-												if (arrayParams.length == 1) {
-													arrayIndex++;
-												}
-												arraySplits.set(splitProperty, arrayIndex);
-
-											case macro :Float:
-												var splitProperty = arrayParams[0].toString();
-												var arrayIndex = arraySplits.get(splitProperty) ?? 0;
-												if (arrayParams.length > 1) {
-													arrayIndex = arrayParams[1].getValue();
-												}
-
-												if (!arraySplits.exists(splitProperty)) {
-													arraySplits.set(splitProperty, 0);
-													exprs.push(macro var $splitProperty = mapData.entities[index].properties.get($v{splitProperty})
-													.split(' '));
-												}
-
-												if (customExpr != null) {
-													if (func == null) {
-														exprs.push(macro $i{f.name} = $customExpr);
-													} else {
-														exprs.push(macro $i{f.name} = $func($customExpr));
-													}
-												} else {
-													if (func == null) {
-														exprs.push(macro $i{f.name} = Std.parseFloat($i{splitProperty}[$v{arrayIndex}]));
-													} else {
-														exprs.push(macro $i{f.name} = $func(Std.parseFloat($i{splitProperty}[$v{arrayIndex}])));
-													}
-												}
-
-												if (arrayParams.length == 1) {
-													arrayIndex++;
-												}
-												arraySplits.set(splitProperty, arrayIndex);
-											default:
 										}
 									}
 								default:

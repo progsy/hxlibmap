@@ -4,9 +4,9 @@ package phxmap.schema;
 class PointDefinition implements Definition {
 	public var id:Int;
 	public var group:GroupDefinition;
-	@:a(origin, 0) @:f(#if (heaps || phxmap.lefthanded) Settings.scaleInverse #else Settings.scale #end) public var x:Float;
-	@:a(origin, 1) @:f(Settings.scale) public var y:Float;
-	@:a(origin, 2) @:f(Settings.scale) public var z:Float;
+	@:aa(origin, ' ', 0) @:f(#if (heaps || phxmap.lefthanded) Settings.scaleInverse #else Settings.scale #end) public var x:Float;
+	@:aa(origin, ' ', 1) @:f(Settings.scale) public var y:Float;
+	@:aa(origin, ' ', 2) @:f(Settings.scale) public var z:Float;
 	@:p public var angle:Float;
 
 	function new() {}
