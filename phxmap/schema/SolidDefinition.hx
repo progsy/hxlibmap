@@ -95,7 +95,7 @@ class SolidDefinition implements Definition {
 	/**
 		This is meant to be overriden to specify geometry tags based on texture name, content flags and surface flags.
 	**/
-	function determineTags(textureName:String, contentFlags:Int, surfaceFlags:Int):Array<String> {
+	public static dynamic function determineTags(textureName:String, contentFlags:Int, surfaceFlags:Int):Array<String> {
 		return [DEFAULT_TAG];
 	}
 
