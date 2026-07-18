@@ -80,7 +80,7 @@ class FGD {
 					var classStandard:Bool;
 					for (m in t.meta.get()) {
 						if (m.name == ":name" && m.params.length > 0) {
-							className = m.params[0].toString();
+							className = m.params[0].getValue();
 						} else if (m.name == ":color") {
 							classColor = [for (p in m.params) p.toString()].join(' ');
 						} else if (m.name == ":size") {
@@ -110,7 +110,7 @@ class FGD {
 								if (m.name == ":p") {
 									marked = true;
 								} else if (m.name == ":n") {
-									fgdName = m.params[0].toString();
+									fgdName = m.params[0].getValue();
 								}
 							}
 							if (!marked) {
@@ -237,7 +237,7 @@ class Loader {
 						continue;
 					}
 					if (m.name == ":name" || m.name == ":n") {
-						className = m.params[0].toString();
+						className = m.params[0].getValue();
 					} else if (m.name == ":guard" || m.name == ":g") {
 						classGuard = m.params[0];
 					}
@@ -272,7 +272,7 @@ class Loader {
 									} else if (m.name == ":c") {
 										customExpr = m.params[0];
 									} else if (m.name == ":n") {
-										fgdName = m.params[0].toString();
+										fgdName = m.params[0].getValue();
 									}
 								}
 							}
@@ -284,7 +284,7 @@ class Loader {
 									if (arrayAccessParams.length > 0) {
 										switch (t) {
 											case macro :Int:
-												var splitProperty = arrayAccessParams[0].toString();
+												var splitProperty = arrayAccessParams[0].getValue();
 												var arrayIndex = arraySplits.get(splitProperty) ?? 0;
 												var arraySeparator = ' ';
 												if (arrayAccessParams.length == 2) {
@@ -315,7 +315,7 @@ class Loader {
 												}
 												arraySplits.set(splitProperty, arrayIndex);
 											case macro :Float:
-												var splitProperty = arrayAccessParams[0].toString();
+												var splitProperty = arrayAccessParams[0].getValue();
 												var arrayIndex = arraySplits.get(splitProperty) ?? 0;
 												var arraySeparator = ' ';
 												if (arrayAccessParams.length == 2) {
@@ -346,7 +346,7 @@ class Loader {
 												}
 												arraySplits.set(splitProperty, arrayIndex);
 											case macro :String:
-												var splitProperty = arrayAccessParams[0].toString();
+												var splitProperty = arrayAccessParams[0].getValue();
 												var arrayIndex = arraySplits.get(splitProperty) ?? 0;
 												var arraySeparator = ' ';
 												if (arrayAccessParams.length == 2) {
@@ -381,7 +381,7 @@ class Loader {
 									} else if (arrayParams.length > 0) {
 										switch (t) {
 											case macro :Int:
-												var splitProperty = arrayParams[0].toString();
+												var splitProperty = arrayParams[0].getValue();
 												var arraySeparator = ' ';
 												if (arrayParams.length > 1) {
 													arraySeparator = arrayParams[1].getValue();
@@ -403,7 +403,7 @@ class Loader {
 													});
 												}
 											case macro :Float:
-												var splitProperty = arrayParams[0].toString();
+												var splitProperty = arrayParams[0].getValue();
 												var arraySeparator = ' ';
 												if (arrayParams.length > 1) {
 													arraySeparator = arrayParams[1].getValue();
@@ -425,7 +425,7 @@ class Loader {
 													});
 												}
 											case macro :String:
-												var splitProperty = arrayParams[0].toString();
+												var splitProperty = arrayParams[0].getValue();
 												var arraySeparator = ' ';
 												if (arrayParams.length > 1) {
 													arraySeparator = arrayParams[1].getValue();

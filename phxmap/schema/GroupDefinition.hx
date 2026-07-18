@@ -1,8 +1,8 @@
 package phxmap.schema;
 
-@:solid @:standard @:name(func_group)
+@:solid @:standard @:name("func_group")
 class GroupDefinition extends SolidDefinition {
-	@:p @:n(_tb_name) public var name:String;
+	@:p @:n("_tb_name") public var name:String;
 
 	public function new() {
 		super();

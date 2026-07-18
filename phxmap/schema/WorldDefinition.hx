@@ -1,6 +1,6 @@
 package phxmap.schema;
 
-@:solid @:standard @:name(worldspawn)
+@:solid @:standard @:name("worldspawn")
 class WorldDefinition extends SolidDefinition {
 	public function new() {
 		super();
