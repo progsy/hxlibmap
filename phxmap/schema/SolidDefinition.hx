@@ -16,8 +16,8 @@ class SolidDefinition implements Definition {
 
 	public var id:Int;
 	public var group:GroupDefinition;
-	@:c(mapData.entities[index].center.x) @:f(#if (heaps || phxmap.lefthanded) Settings.scaleInverse #else Settings.scale #end) public var x:Float;
-	@:c(mapData.entities[index].center.y) @:f(Settings.scale) public var y:Float;
+	@:c(mapData.entities[index].center.x) @:f(Settings.scale) public var x:Float;
+	@:c(mapData.entities[index].center.y) @:f(#if (heaps || phxmap.lefthanded) Settings.scaleInverse #else Settings.scale #end) public var y:Float;
 	@:c(mapData.entities[index].center.z) @:f(Settings.scale) public var z:Float;
 	@:p public var angle:Float;
 
@@ -55,23 +55,22 @@ class SolidDefinition implements Definition {
 					var indexOffset = indexOffsets.get(geometry);
 					for (v in geo.vertices) {
 						#if heaps
-						geometry.vertices.push(new h3d.Vector(Settings.scaleInverse(v.vertex.x - entity.center.x),
-							Settings.scale(v.vertex.y - entity.center.y), Settings.scale(v.vertex.z - entity.center.z)));
-						geometry.normals.push(new h3d.Vector(Settings.scaleInverse(v.normal.x), Settings.scale(v.normal.y), Settings.scale(v.normal.z)));
-						geometry.tangents.push(new h3d.Vector(Settings.scaleInverse(v.tangent.x), Settings.scale(v.tangent.y), Settings.scale(v.tangent.z)));
+						geometry.vertices.push(new h3d.Vector(Settings.scale(v.vertex.x) - x, Settings.scaleInverse(v.vertex.y) - y,
+							Settings.scale(v.vertex.z) - z));
+						geometry.normals.push(new h3d.Vector(Settings.scale(v.normal.x), Settings.scaleInverse(v.normal.y), Settings.scale(v.normal.z)));
+						geometry.tangents.push(new h3d.Vector(Settings.scale(v.tangent.x), Settings.scaleInverse(v.tangent.y), Settings.scale(v.tangent.z)));
 						geometry.uvs.push(new h3d.prim.UV(v.uv.u, v.uv.v));
 						#else
-						geometry.vertices.push(#if phxmap.lefthanded Settings.scaleInverse(v.vertex.x - entity.center.x) #else Settings.scale(v.vertex.x
-							- entity.center.x) #end);
-						geometry.vertices.push(Settings.scale(v.vertex.y - entity.center.y));
-						geometry.vertices.push(Settings.scale(v.vertex.z - entity.center.z));
+						geometry.vertices.push(Settings.scale(v.vertex.x) - x);
+						geometry.vertices.push(#if phxmap.lefthanded Settings.scaleInverse(v.vertex.y) #else Settings.scale(v.vertex.y) #end - y);
+						geometry.vertices.push(Settings.scale(v.vertex.z) - z);
 						geometry.uvs.push(v.uv.u);
 						geometry.uvs.push(v.uv.v);
-						geometry.normals.push(#if phxmap.lefthanded - v.normal.x #else v.normal.x #end);
-						geometry.normals.push(v.normal.y);
+						geometry.normals.push(v.normal.x);
+						geometry.normals.push(#if phxmap.lefthanded - v.normal.y #else v.normal.y #end);
 						geometry.normals.push(v.normal.z);
-						geometry.tangents.push(#if phxmap.lefthanded - v.tangent.x #else v.tangent.x #end);
-						geometry.tangents.push(v.tangent.y);
+						geometry.tangents.push(v.tangent.x);
+						geometry.tangents.push(#if phxmap.lefthanded - v.tangent.y #else v.tangent.y #end);
 						geometry.tangents.push(v.tangent.z);
 						#if !phxmap.no_tangent_w
 						geometry.tangents.push(#if phxmap.lefthanded - v.tangent.w #else v.tangent.w #end);
