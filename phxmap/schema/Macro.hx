@@ -149,7 +149,7 @@ class FGD {
 												}
 											default:
 										}
-										"Flags";
+										tbtype = "Flags";
 									}
 								case TEnum(_.get() => t, params):
 									var tfs = [
@@ -482,7 +482,7 @@ class Loader {
 														exprs.push(macro $i{f.name} = $func(mapData.entities[index].properties.get($v{fgdName})));
 													}
 												case _ if (t.toString().contains("EnumFlags")):
-													exprs.push(macro $i{f.name} = cast Std.parseInt(mapData.entities[ndex].properties.get($v{fgdName})));
+													exprs.push(macro $i{f.name} = cast Std.parseInt(mapData.entities[index].properties.get($v{fgdName})));
 												default:
 													switch (t.toType()) {
 														case TEnum(_.get() => t, params):
